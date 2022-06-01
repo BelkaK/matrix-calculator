@@ -1,6 +1,9 @@
 import tkinter
 import tkinter.messagebox
+from typing import Tuple
 import customtkinter
+
+from operations import *
 
 # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_appearance_mode("System")
@@ -10,7 +13,7 @@ customtkinter.set_default_color_theme("dark-blue")
 
 class App(customtkinter.CTk):
 
-    WIDTH = 780
+    WIDTH = 1000
     HEIGHT = 520
 
     def __init__(self):
@@ -63,7 +66,7 @@ class App(customtkinter.CTk):
                                                 text="Addition",
                                                 # <- custom tuple-color
                                                 fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
+                                                command=self.button_add)
         self.button_2.grid(row=3, column=0, pady=10, padx=20)
 
         self.button_3 = customtkinter.CTkButton(master=self.frame_left,
@@ -118,7 +121,7 @@ class App(customtkinter.CTk):
 
         # configure grid layout (1x1)
         self.frame_info.rowconfigure(0, weight=1)
-        self.frame_info.columnconfigure((0, 1), weight=1)
+        self.frame_info.columnconfigure((0, 1, 2), weight=1)
 
         self.frame_entry_right = customtkinter.CTkFrame(master=self.frame_info)
         self.frame_entry_right.grid(row=0, column=0, columnspan=1,
@@ -128,10 +131,14 @@ class App(customtkinter.CTk):
         self.frame_entry_left.grid(row=0, column=1, columnspan=1,
                                    rowspan=4, pady=20, padx=20, sticky="nsew")
 
+        self.frame_result = customtkinter.CTkFrame(master=self.frame_info)
+        self.frame_result.grid(row=0, column=2, columnspan=1,
+                               rowspan=4, pady=20, padx=20, sticky="nsew")
+
         self.power_entry = customtkinter.CTkEntry(master=self.frame_info,
                                                   width=120,
                                                   placeholder_text="Power:")
-        self.power_entry.grid(row=4, column=0, columnspan=2,
+        self.power_entry.grid(row=4, column=0, columnspan=3,
                               pady=20, padx=20, sticky="we")
 
         # ============ frame_right ============
@@ -158,29 +165,60 @@ class App(customtkinter.CTk):
         self.switch_2.select()
         self.matrix1 = []
         self.matrix2 = []
+        self.entry1 = []
+        self.entry2 = []
+        self.result = []
+        self.result_display = []
 
     def button_event(self):
         print("Button pressed")
 
+    def button_add(self):
+        self.get_data()
+        print(self.entry1)
+        print(self.entry2)
+        self.result = add_matrices(self.entry1, self.entry2)
+        print(self.result)
+        self.display_result()
+
+    def display_result(self):
+        for i in range(len(self.result)):
+            self.result_display.append([customtkinter.CTkLabel(
+                master=self.frame_result, text=f"{self.result[i][j]}", width=30) for j in range(len(self.result))])
+        for i in range(len(self.result_display)):
+            for j in range(len(self.result_display)):
+                self.result_display[i][j].grid(row=i, column=j)
+
+    def get_data(self) -> None:
+        self.entry1 = []
+        self.entry2 = []
+        for row in self.matrix1:
+            vector1 = [int(elem.get()) if elem else 0 for elem in row]
+            self.entry1.append(vector1)
+        for row in self.matrix2:
+            vector2 = [int(elem.get()) if elem else 0 for elem in row]
+            self.entry2.append(vector2)
+
     def dimention_event(self):
-        for input in self.matrix1:
-            for elem in input:
-                elem.grid_remove()
-        for input in self.matrix2:
-            for elem in input:
-                elem.grid_remove()
-        self.matrix1 = []
-        self.matrix2 = []
-        n = int(self.dimention_entry.get())
-        for _ in range(n):
-            self.matrix1.append([customtkinter.CTkEntry(
-                master=self.frame_entry_left, width=30) for _ in range(n)])
-            self.matrix2.append([customtkinter.CTkEntry(
-                master=self.frame_entry_right, width=30) for _ in range(n)])
-        for i in range(n):
-            for j in range(n):
-                self.matrix1[i][j].grid(row=i, column=j)
-                self.matrix2[i][j].grid(row=i, column=j)
+        if int(self.dimention_entry.get()) < 7:
+            for input in self.matrix1:
+                for elem in input:
+                    elem.grid_remove()
+            for input in self.matrix2:
+                for elem in input:
+                    elem.grid_remove()
+            self.matrix1 = []
+            self.matrix2 = []
+            n = int(self.dimention_entry.get())
+            for _ in range(n):
+                self.matrix1.append([customtkinter.CTkEntry(
+                    master=self.frame_entry_left, width=30) for _ in range(n)])
+                self.matrix2.append([customtkinter.CTkEntry(
+                    master=self.frame_entry_right, width=30) for _ in range(n)])
+            for i in range(n):
+                for j in range(n):
+                    self.matrix1[i][j].grid(row=i, column=j)
+                    self.matrix2[i][j].grid(row=i, column=j)
 
     def change_mode(self):
         if self.switch_2.get() == 1:
