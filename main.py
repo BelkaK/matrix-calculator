@@ -14,7 +14,7 @@ customtkinter.set_default_color_theme("dark-blue")
 class App(customtkinter.CTk):
 
     WIDTH = 1000
-    HEIGHT = 520
+    HEIGHT = 600
 
     def __init__(self):
         super().__init__()
@@ -114,13 +114,31 @@ class App(customtkinter.CTk):
 
         # configure grid layout (3x7)
         self.frame_right.rowconfigure((0, 1, 2, 3), weight=1)
-        self.frame_right.rowconfigure(7, weight=10)
+        self.frame_right.rowconfigure(8, weight=10)
         self.frame_right.columnconfigure((0, 1), weight=1)
         self.frame_right.columnconfigure(2, weight=0)
 
         self.frame_matrices = customtkinter.CTkFrame(master=self.frame_right)
         self.frame_matrices.grid(row=0, column=0, columnspan=3,
                                  rowspan=4, pady=20, padx=20, sticky="nsew")
+
+        self.path_entry = customtkinter.CTkEntry(master=self.frame_right,
+                                                 width=120,
+                                                 placeholder_text="Path:")
+        self.path_entry.grid(row=4, column=0, columnspan=1,
+                             pady=20, padx=20, sticky="we")
+
+        self.char_entry = customtkinter.CTkEntry(master=self.frame_right,
+                                                 width=120,
+                                                 placeholder_text="Separating char:")
+        self.char_entry.grid(row=4, column=1, columnspan=1,
+                             pady=20, padx=20, sticky="we")
+
+        self.read_file_button = customtkinter.CTkButton(master=self.frame_right,
+                                                        text="Confirm file",
+                                                        command=self.dimention_button_event)
+        self.read_file_button.grid(row=4, column=2, columnspan=1,
+                                   pady=20, padx=20, sticky="we")
 
         self.dimention_entry = customtkinter.CTkEntry(master=self.frame_right,
                                                       width=120,
@@ -175,7 +193,7 @@ class App(customtkinter.CTk):
     def history_button_event(self):
         pass
 
-    def display_result(self, result: List[List[int]]) -> None:
+    def display_result(self, result: List[List[float]]) -> None:
         for row in result:
             self.result_display.append([customtkinter.CTkLabel(
                 master=self.frame_result, text=f"{value}", width=30) for value in row])
@@ -183,7 +201,7 @@ class App(customtkinter.CTk):
             for column_index, value in enumerate(row):
                 value.grid(row=row_index, column=column_index)
 
-    def get_data(self) -> Tuple[List[int], List[int], int]:
+    def get_data(self) -> Tuple[List[float], List[float], int]:
         matrix1 = []
         matrix2 = []
         try:
@@ -192,10 +210,10 @@ class App(customtkinter.CTk):
             print("power must be an intiger")
             power = 0
         for row_index, row in enumerate(self.matrix1):
-            vector1 = [int(elem.get()) if elem else 0 for elem in row]
+            vector1 = [float(elem.get()) if elem else 0 for elem in row]
             matrix1.append(vector1)
             vector2 = [
-                int(elem.get()) if elem else 0 for elem in self.matrix2[row_index]]
+                float(elem.get()) if elem else 0 for elem in self.matrix2[row_index]]
             matrix2.append(vector2)
         return [matrix1, matrix2, power]
 

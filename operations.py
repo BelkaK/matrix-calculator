@@ -1,7 +1,7 @@
 from typing import List
 
 
-def add_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def add_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     result = []
     for i in range(len(matrix1)):
         vector = [matrix1[i][j] + matrix2[i][j] for j in range(len(matrix1))]
@@ -9,21 +9,21 @@ def add_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[Lis
     return result
 
 
-def subtract_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def subtract_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     pass
 
 
-def devise_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def devise_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     pass
 
 
-def invert_matrix(matrix: List[List[int]]) -> List[List[int]]:
+def invert_matrix(matrix: List[List[float]]) -> List[List[float]]:
     pass
 
 
-def compute_determinant(matrix: List[List[int]]) -> List[List[int]]:
+def compute_determinant(matrix: List[List[float]]) -> List[List[float]]:
     pass
 
 
-def raise_to_power(matrix: List[List[int]], power: int) -> List[List[int]]:
+def raise_to_power(matrix: List[List[float]], power: float) -> List[List[float]]:
     pass
