@@ -50,60 +50,65 @@ class App(customtkinter.CTk):
         # empty row with minsize as spacing
         self.frame_left.grid_rowconfigure(11, minsize=10)
 
-        self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
-                                              text="Choose operation:",
-                                              text_font=("Roboto Medium", -16))  # font name and size in px
-        self.label_1.grid(row=1, column=0, pady=10, padx=10)
+        # ============ operation choises ============
 
-        self.button_1 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Substraction",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
-        self.button_1.grid(row=2, column=0, pady=10, padx=20)
+        self.prompt_operation = customtkinter.CTkLabel(master=self.frame_left,
+                                                       text="Choose operation:",
+                                                       text_font=("Roboto Medium", -16))  # font name and size in px
+        self.prompt_operation.grid(row=1, column=0, pady=10, padx=10)
 
-        self.button_2 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Addition",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_add)
-        self.button_2.grid(row=3, column=0, pady=10, padx=20)
+        self.subtraction_button = customtkinter.CTkButton(master=self.frame_left,
+                                                          text="Subtraction",
+                                                          # <- custom tuple-color
+                                                          fg_color=(
+                                                              "gray75", "gray30"),
+                                                          command=self.subtraction_button_event)
+        self.subtraction_button.grid(row=2, column=0, pady=10, padx=20)
 
-        self.button_3 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Division",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
-        self.button_3.grid(row=4, column=0, pady=10, padx=20)
+        self.addition_button = customtkinter.CTkButton(master=self.frame_left,
+                                                       text="Addition",
+                                                       # <- custom tuple-color
+                                                       fg_color=(
+                                                           "gray75", "gray30"),
+                                                       command=self.addition_button_event)
+        self.addition_button.grid(row=3, column=0, pady=10, padx=20)
 
-        self.button_4 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Power",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
-        self.button_4.grid(row=5, column=0, pady=10, padx=20)
+        self.division_button = customtkinter.CTkButton(master=self.frame_left,
+                                                       text="Division",
+                                                       # <- custom tuple-color
+                                                       fg_color=(
+                                                           "gray75", "gray30"),
+                                                       command=self.division_button_event)
+        self.division_button.grid(row=4, column=0, pady=10, padx=20)
 
-        self.button_5 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Inversion",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
-        self.button_5.grid(row=6, column=0, pady=10, padx=20)
+        self.power_button = customtkinter.CTkButton(master=self.frame_left,
+                                                    text="Power",
+                                                    # <- custom tuple-color
+                                                    fg_color=(
+                                                        "gray75", "gray30"),
+                                                    command=self.power_button_event)
+        self.power_button.grid(row=5, column=0, pady=10, padx=20)
 
-        self.button_6 = customtkinter.CTkButton(master=self.frame_left,
-                                                text="Determinant",
-                                                # <- custom tuple-color
-                                                fg_color=("gray75", "gray30"),
-                                                command=self.button_event)
-        self.button_6.grid(row=7, column=0, pady=10, padx=20)
+        self.inversion_button = customtkinter.CTkButton(master=self.frame_left,
+                                                        text="Inversion",
+                                                        # <- custom tuple-color
+                                                        fg_color=(
+                                                            "gray75", "gray30"),
+                                                        command=self.inversion_button_event)
+        self.inversion_button.grid(row=6, column=0, pady=10, padx=20)
 
-        #self.switch_1 = customtkinter.CTkSwitch(master=self.frame_left)
-        #self.switch_1.grid(row=9, column=0, pady=10, padx=20, sticky="w")
+        self.determinant_button = customtkinter.CTkButton(master=self.frame_left,
+                                                          text="Determinant",
+                                                          # <- custom tuple-color
+                                                          fg_color=(
+                                                              "gray75", "gray30"),
+                                                          command=self.determinant_button_event)
+        self.determinant_button.grid(row=7, column=0, pady=10, padx=20)
 
-        self.switch_2 = customtkinter.CTkSwitch(master=self.frame_left,
-                                                text="Dark Mode",
-                                                command=self.change_mode)
-        self.switch_2.grid(row=10, column=0, pady=10, padx=20, sticky="w")
+        self.mode_switch = customtkinter.CTkSwitch(master=self.frame_left,
+                                                   text="Dark Mode",
+                                                   command=self.change_mode)
+        self.mode_switch.grid(row=10, column=0, pady=10, padx=20, sticky="w")
 
         # ============ frame_right ============
 
@@ -113,35 +118,9 @@ class App(customtkinter.CTk):
         self.frame_right.columnconfigure((0, 1), weight=1)
         self.frame_right.columnconfigure(2, weight=0)
 
-        self.frame_info = customtkinter.CTkFrame(master=self.frame_right)
-        self.frame_info.grid(row=0, column=0, columnspan=3,
-                             rowspan=4, pady=20, padx=20, sticky="nsew")
-
-        # ============ frame_info ============
-
-        # configure grid layout (1x1)
-        self.frame_info.rowconfigure(0, weight=1)
-        self.frame_info.columnconfigure((0, 1, 2), weight=1)
-
-        self.frame_entry_right = customtkinter.CTkFrame(master=self.frame_info)
-        self.frame_entry_right.grid(row=0, column=0, columnspan=1,
-                                    rowspan=4, pady=20, padx=20, sticky="nsew")
-
-        self.frame_entry_left = customtkinter.CTkFrame(master=self.frame_info)
-        self.frame_entry_left.grid(row=0, column=1, columnspan=1,
-                                   rowspan=4, pady=20, padx=20, sticky="nsew")
-
-        self.frame_result = customtkinter.CTkFrame(master=self.frame_info)
-        self.frame_result.grid(row=0, column=2, columnspan=1,
-                               rowspan=4, pady=20, padx=20, sticky="nsew")
-
-        self.power_entry = customtkinter.CTkEntry(master=self.frame_info,
-                                                  width=120,
-                                                  placeholder_text="Power:")
-        self.power_entry.grid(row=4, column=0, columnspan=3,
-                              pady=20, padx=20, sticky="we")
-
-        # ============ frame_right ============
+        self.frame_matrices = customtkinter.CTkFrame(master=self.frame_right)
+        self.frame_matrices.grid(row=0, column=0, columnspan=3,
+                                 rowspan=4, pady=20, padx=20, sticky="nsew")
 
         self.dimention_entry = customtkinter.CTkEntry(master=self.frame_right,
                                                       width=120,
@@ -149,58 +128,82 @@ class App(customtkinter.CTk):
         self.dimention_entry.grid(row=7, column=0, columnspan=2,
                                   pady=20, padx=20, sticky="we")
 
-        self.button_dimention = customtkinter.CTkButton(master=self.frame_right,
+        self.dimention_button = customtkinter.CTkButton(master=self.frame_right,
                                                         text="Confirm dimention",
-                                                        command=self.dimention_event)
-        self.button_dimention.grid(row=7, column=2, columnspan=1,
+                                                        command=self.dimention_button_event)
+        self.dimention_button.grid(row=7, column=2, columnspan=1,
                                    pady=20, padx=20, sticky="we")
 
-        self.button_history = customtkinter.CTkButton(master=self.frame_right,
+        self.history_button = customtkinter.CTkButton(master=self.frame_right,
                                                       text="Browse history of operations",
-                                                      command=self.dimention_event)
-        self.button_history.grid(row=8, column=0, columnspan=3,
+                                                      command=self.history_button_event)
+        self.history_button.grid(row=8, column=0, columnspan=3,
                                  pady=20, padx=20, sticky="we")
 
+        # ============ frame_matrices ============
+
+        # configure grid layout (1x3)
+        self.frame_matrices.rowconfigure(0, weight=1)
+        self.frame_matrices.columnconfigure((0, 1, 2), weight=1)
+
+        self.frame_entry_right = customtkinter.CTkFrame(
+            master=self.frame_matrices)
+        self.frame_entry_right.grid(row=0, column=0, columnspan=1,
+                                    rowspan=4, pady=20, padx=20, sticky="nsew")
+
+        self.frame_entry_left = customtkinter.CTkFrame(
+            master=self.frame_matrices)
+        self.frame_entry_left.grid(row=0, column=1, columnspan=1,
+                                   rowspan=4, pady=20, padx=20, sticky="nsew")
+
+        self.frame_result = customtkinter.CTkFrame(master=self.frame_matrices)
+        self.frame_result.grid(row=0, column=2, columnspan=1,
+                               rowspan=4, pady=20, padx=20, sticky="nsew")
+
+        self.power_entry = customtkinter.CTkEntry(master=self.frame_matrices,
+                                                  width=120,
+                                                  placeholder_text="Power:")
+        self.power_entry.grid(row=4, column=0, columnspan=3,
+                              pady=20, padx=20, sticky="we")
+
         # set default values
-        self.switch_2.select()
+        self.mode_switch.select()
         self.matrix1 = []
         self.matrix2 = []
-        self.entry1 = []
-        self.entry2 = []
-        self.result = []
         self.result_display = []
 
-    def button_event(self):
-        print("Button pressed")
+    def history_button_event(self):
+        pass
 
-    def button_add(self):
-        self.get_data()
-        print(self.entry1)
-        print(self.entry2)
-        self.result = add_matrices(self.entry1, self.entry2)
-        print(self.result)
-        self.display_result()
-
-    def display_result(self):
-        for i in range(len(self.result)):
+    def display_result(self, result: List[List[int]]) -> None:
+        for row in result:
             self.result_display.append([customtkinter.CTkLabel(
-                master=self.frame_result, text=f"{self.result[i][j]}", width=30) for j in range(len(self.result))])
-        for i in range(len(self.result_display)):
-            for j in range(len(self.result_display)):
-                self.result_display[i][j].grid(row=i, column=j)
+                master=self.frame_result, text=f"{value}", width=30) for value in row])
+        for row_index, row in enumerate(self.result_display):
+            for column_index, value in enumerate(row):
+                value.grid(row=row_index, column=column_index)
 
-    def get_data(self) -> None:
-        self.entry1 = []
-        self.entry2 = []
-        for row in self.matrix1:
+    def get_data(self) -> Tuple[List[int], List[int], int]:
+        matrix1 = []
+        matrix2 = []
+        try:
+            power = int(self.power_entry.get())
+        except ValueError:
+            print("power must be an intiger")
+            power = 0
+        for row_index, row in enumerate(self.matrix1):
             vector1 = [int(elem.get()) if elem else 0 for elem in row]
-            self.entry1.append(vector1)
-        for row in self.matrix2:
-            vector2 = [int(elem.get()) if elem else 0 for elem in row]
-            self.entry2.append(vector2)
+            matrix1.append(vector1)
+            vector2 = [
+                int(elem.get()) if elem else 0 for elem in self.matrix2[row_index]]
+            matrix2.append(vector2)
+        return [matrix1, matrix2, power]
 
-    def dimention_event(self):
-        if int(self.dimention_entry.get()) < 7:
+    def dimention_button_event(self):
+        dimention = int(self.dimention_entry.get())
+        if dimention < 7:
+
+            # clear the previous inputs
             for input in self.matrix1:
                 for elem in input:
                     elem.grid_remove()
@@ -209,19 +212,44 @@ class App(customtkinter.CTk):
                     elem.grid_remove()
             self.matrix1 = []
             self.matrix2 = []
-            n = int(self.dimention_entry.get())
-            for _ in range(n):
+
+            # display new entries
+            for _ in range(dimention):
                 self.matrix1.append([customtkinter.CTkEntry(
-                    master=self.frame_entry_left, width=30) for _ in range(n)])
+                    master=self.frame_entry_left, width=30) for _ in range(dimention)])
                 self.matrix2.append([customtkinter.CTkEntry(
-                    master=self.frame_entry_right, width=30) for _ in range(n)])
-            for i in range(n):
-                for j in range(n):
-                    self.matrix1[i][j].grid(row=i, column=j)
-                    self.matrix2[i][j].grid(row=i, column=j)
+                    master=self.frame_entry_right, width=30) for _ in range(dimention)])
+            for row_index, row in enumerate(self.matrix1):
+                for column_index, elem in enumerate(row):
+                    elem.grid(row=row_index, column=column_index)
+                    self.matrix2[row_index][column_index].grid(
+                        row=row_index, column=column_index)
+
+    def addition_button_event(self):
+        self.display_result(add_matrices(
+            self.get_data()[0], self.get_data()[1]))
+
+    def subtraction_button_event(self):
+        self.display_result(subtract_matrices(
+            self.get_data()[0], self.get_data()[1]))
+
+    def division_button_event(self):
+        self.display_result(devise_matrices(
+            self.get_data()[0], self.get_data()[1]))
+
+    def power_button_event(self):
+
+        self.display_result(raise_to_power(
+            self.get_data()[0], self.get_data()[2]))
+
+    def inversion_button_event(self):
+        self.display_result(invert_matrix(self.get_data()[0]))
+
+    def determinant_button_event(self):
+        self.display_result(compute_determinant(self.get_data()[0]))
 
     def change_mode(self):
-        if self.switch_2.get() == 1:
+        if self.mode_switch.get() == 1:
             customtkinter.set_appearance_mode("dark")
         else:
             customtkinter.set_appearance_mode("light")
