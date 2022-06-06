@@ -73,13 +73,13 @@ class App(customtkinter.CTk):
                                                        command=self.addition_button_event)
         self.addition_button.grid(row=3, column=0, pady=10, padx=20)
 
-        self.division_button = customtkinter.CTkButton(master=self.frame_left,
-                                                       text="Division",
-                                                       # <- custom tuple-color
-                                                       fg_color=(
-                                                           "gray75", "gray30"),
-                                                       command=self.division_button_event)
-        self.division_button.grid(row=4, column=0, pady=10, padx=20)
+        self.multiplication_button = customtkinter.CTkButton(master=self.frame_left,
+                                                             text="Multiplication",
+                                                             # <- custom tuple-color
+                                                             fg_color=(
+                                                                 "gray75", "gray30"),
+                                                             command=self.multiplication_button_event)
+        self.multiplication_button.grid(row=4, column=0, pady=10, padx=20)
 
         self.power_button = customtkinter.CTkButton(master=self.frame_left,
                                                     text="Power",
@@ -136,7 +136,7 @@ class App(customtkinter.CTk):
 
         self.read_file_button = customtkinter.CTkButton(master=self.frame_right,
                                                         text="Confirm file",
-                                                        command=self.dimention_button_event)
+                                                        command=self.read_file_button_event)
         self.read_file_button.grid(row=4, column=2, columnspan=1,
                                    pady=20, padx=20, sticky="we")
 
@@ -166,12 +166,12 @@ class App(customtkinter.CTk):
 
         self.frame_entry_right = customtkinter.CTkFrame(
             master=self.frame_matrices)
-        self.frame_entry_right.grid(row=0, column=0, columnspan=1,
+        self.frame_entry_right.grid(row=0, column=1, columnspan=1,
                                     rowspan=4, pady=20, padx=20, sticky="nsew")
 
         self.frame_entry_left = customtkinter.CTkFrame(
             master=self.frame_matrices)
-        self.frame_entry_left.grid(row=0, column=1, columnspan=1,
+        self.frame_entry_left.grid(row=0, column=0, columnspan=1,
                                    rowspan=4, pady=20, padx=20, sticky="nsew")
 
         self.frame_result = customtkinter.CTkFrame(master=self.frame_matrices)
@@ -190,32 +190,8 @@ class App(customtkinter.CTk):
         self.matrix2 = []
         self.result_display = []
 
-    def history_button_event(self):
+    def read_file_button_event():
         pass
-
-    def display_result(self, result: List[List[float]]) -> None:
-        for row in result:
-            self.result_display.append([customtkinter.CTkLabel(
-                master=self.frame_result, text=f"{value}", width=30) for value in row])
-        for row_index, row in enumerate(self.result_display):
-            for column_index, value in enumerate(row):
-                value.grid(row=row_index, column=column_index)
-
-    def get_data(self) -> Tuple[List[float], List[float], int]:
-        matrix1 = []
-        matrix2 = []
-        try:
-            power = int(self.power_entry.get())
-        except ValueError:
-            print("power must be an intiger")
-            power = 0
-        for row_index, row in enumerate(self.matrix1):
-            vector1 = [float(elem.get()) if elem else 0 for elem in row]
-            matrix1.append(vector1)
-            vector2 = [
-                float(elem.get()) if elem else 0 for elem in self.matrix2[row_index]]
-            matrix2.append(vector2)
-        return [matrix1, matrix2, power]
 
     def dimention_button_event(self):
         dimention = int(self.dimention_entry.get())
@@ -243,6 +219,66 @@ class App(customtkinter.CTk):
                     self.matrix2[row_index][column_index].grid(
                         row=row_index, column=column_index)
 
+    def get_data(self) -> Tuple[List[float], List[float], int]:
+        matrix1 = []
+        matrix2 = []
+        try:
+            power = int(self.power_entry.get())
+        except ValueError:
+            power = 0
+
+        for row_index, row in enumerate(self.matrix1):
+            vector1 = []
+            vector2 = []
+            for column_index, elem in enumerate(row):
+                try:
+                    vector1.append(float(elem.get()))
+                except ValueError:
+                    vector1.append(0.0)
+                try:
+                    vector2.append(
+                        float(self.matrix2[row_index][column_index].get()))
+                except ValueError:
+                    vector2.append(0.0)
+            matrix1.append(vector1)
+            matrix2.append(vector2)
+
+        # for row_index, row in enumerate(self.matrix1):
+        #    vector1 = [float(elem.get()) if elem else 0 for elem in row]
+        #    matrix1.append(vector1)
+        #    vector2 = [
+        #        float(elem.get()) if elem else 0 for elem in self.matrix2[row_index]]
+        #    matrix2.append(vector2)
+
+        return [matrix1, matrix2, power]
+
+    def display_result(self, result: List[List[float]]) -> None:
+        for input in self.result_display:
+            for elem in input:
+                elem.grid_remove()
+        self.result_display = []
+        for row in result:
+            self.result_display.append([customtkinter.CTkLabel(
+                master=self.frame_result, text=f"{value}", width=30) for value in row])
+        for row_index, row in enumerate(self.result_display):
+            for column_index, value in enumerate(row):
+                value.grid(row=row_index, column=column_index)
+
+    def display_operation_history_window(self):
+        window = customtkinter.CTkToplevel(self)
+        window.title("Operation history")
+        window.geometry("600x700")
+
+        window.grid_columnconfigure((0, 1, 2), weight=1)
+        window.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1)
+
+        # create label on CTkToplevel window
+        label = customtkinter.CTkLabel(window, text="Previous operations")
+        label.grid(row=0, column=0, columnspan=3)
+
+    def history_button_event(self):
+        self.display_operation_history_window()
+
     def addition_button_event(self):
         self.display_result(add_matrices(
             self.get_data()[0], self.get_data()[1]))
@@ -251,8 +287,8 @@ class App(customtkinter.CTk):
         self.display_result(subtract_matrices(
             self.get_data()[0], self.get_data()[1]))
 
-    def division_button_event(self):
-        self.display_result(devise_matrices(
+    def multiplication_button_event(self):
+        self.display_result(multiply_matrices(
             self.get_data()[0], self.get_data()[1]))
 
     def power_button_event(self):
@@ -264,7 +300,10 @@ class App(customtkinter.CTk):
         self.display_result(invert_matrix(self.get_data()[0]))
 
     def determinant_button_event(self):
-        self.display_result(compute_determinant(self.get_data()[0]))
+        print(compute_determinant(self.get_data()[0]))
+        result = [[compute_determinant(self.get_data()[0])]]
+        print(result)
+        self.display_result(result)
 
     def change_mode(self):
         if self.mode_switch.get() == 1:
