@@ -1,7 +1,7 @@
 from typing import List
 
 
-def subtract_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def subtract_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     result = []
     for i in range(len(matrix1)):
         vector = []
@@ -11,7 +11,7 @@ def subtract_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> Lis
     return result
 
 
-def add_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def add_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     result = []
     for i in range(len(matrix1)):
         vector = [matrix1[i][j] + matrix2[i][j] for j in range(len(matrix1))]
@@ -19,7 +19,7 @@ def add_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[Lis
     return result
 
 
-def raise_to_power(matrix: List[List[int]], power: int) -> List[List[int]]:
+def raise_to_power(matrix: List[List[float]], power: int) -> List[List[float]]:
     matrix_const = matrix[:]
     for n in range(0, (power - 1)):
         for i in range(len(matrix)):
@@ -33,7 +33,7 @@ def raise_to_power(matrix: List[List[int]], power: int) -> List[List[int]]:
     return matrix
 
 
-def multiply_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> List[List[int]]:
+def multiply_matrices(matrix1: List[List[float]], matrix2: List[List[float]]) -> List[List[float]]:
     result = []
     for i in range(len(matrix1)):
         vector = []
@@ -46,21 +46,21 @@ def multiply_matrices(matrix1: List[List[int]], matrix2: List[List[int]]) -> Lis
     return result
 
 
-def multiply_matrix(matrix: List[List[int]], number: int) -> List[List[int]]:
+def multiply_matrix(matrix: List[List[float]], number: float) -> List[List[float]]:
     for i in range(len(matrix)):
         for j in range(len(matrix)):
             matrix[i][j] *= number
     return matrix
 
 
-def divide_matrix(matrix: List[List[int]], number: int) -> List[List[float]]:
+def divide_matrix(matrix: List[List[float]], number: float) -> List[List[float]]:
     for i in range(len(matrix)):
         for j in range(len(matrix)):
             matrix[i][j] *= 1/number
     return matrix
 
 
-def compute_determinant(matrix: List[List[int]]) -> int:
+def compute_determinant(matrix: List[List[float]]) -> float:
     if len(matrix) == 1:
         return matrix[0][0]
     else:
@@ -73,7 +73,7 @@ def compute_determinant(matrix: List[List[int]]) -> int:
         return result
 
 
-def transpose_matrix(matrix: List[List[int]]) -> List[List[int]]:
+def transpose_matrix(matrix: List[List[float]]) -> List[List[float]]:
     result = matrix[:]
     for i in range(len(matrix)):
         for j in range(len(matrix)):
@@ -81,7 +81,7 @@ def transpose_matrix(matrix: List[List[int]]) -> List[List[int]]:
     return result
 
 
-def invert_matrix(matrix: List[List[int]]) -> List[List[float]]:
+def invert_matrix(matrix: List[List[float]]) -> List[List[float]]:
     complement_matrix = matrix[:]
     for i in range(len(matrix)):
         for j in range(len(matrix)):
