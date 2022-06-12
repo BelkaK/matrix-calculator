@@ -3,7 +3,9 @@ import tkinter.messagebox
 from typing import Tuple
 import customtkinter
 
+from memory_managment import Memory
 from operations import *
+from read_from_file import *
 
 # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_appearance_mode("System")
@@ -189,9 +191,21 @@ class App(customtkinter.CTk):
         self.matrix1 = []
         self.matrix2 = []
         self.result_display = []
+        self.memory = Memory()
 
-    def read_file_button_event():
-        pass
+    def read_file_button_event(self):
+        matrix = read_matrix_from_file(
+            self.path_entry.get(), self.char_entry.get)
+        for input in self.matrix1:
+            for elem in input:
+                elem.grid_remove()
+        self.matrix1 = []
+        for i in range(len(matrix)):
+            self.matrix1.append([customtkinter.CTkEntry(
+                master=self.frame_entry_left, width=30, placeholder_text=matrix[i][j]) for j in range(len(matrix))])
+        for row_index, row in enumerate(self.matrix1):
+            for column_index, elem in enumerate(row):
+                elem.grid(row=row_index, column=column_index)
 
     def dimention_button_event(self):
         dimention = int(self.dimention_entry.get())
@@ -269,40 +283,168 @@ class App(customtkinter.CTk):
         window.title("Operation history")
         window.geometry("600x700")
 
-        window.grid_columnconfigure((0, 1, 2), weight=1)
-        window.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), weight=1)
+        window.grid_columnconfigure((0), weight=1)
+        window.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6, 7, 8, 9), weight=1)
 
         # create label on CTkToplevel window
-        label = customtkinter.CTkLabel(window, text="Previous operations")
-        label.grid(row=0, column=0, columnspan=3)
+        for row, entry in enumerate(self.memory.results_list):
+
+            frame_entry = customtkinter.CTkFrame(master=window,
+                                                 width=180,
+                                                 corner_radius=0)
+            frame_entry.grid(row=row, column=0, sticky="nswe")
+            frame_entry.rowconfigure((0), weight=1)
+            frame_entry.columnconfigure((0, 1, 2, 3), weight=1)
+
+            frame_matrix1 = customtkinter.CTkFrame(master=frame_entry,
+                                                   width=180,
+                                                   corner_radius=0)
+            frame_matrix1.grid(row=0, column=0, sticky="nswe")
+
+            frame_matrix2 = customtkinter.CTkFrame(master=frame_entry,
+                                                   width=180,
+                                                   corner_radius=0)
+            frame_matrix2.grid(row=0, column=1, sticky="nswe")
+
+            frame_operation = customtkinter.CTkFrame(master=frame_entry,
+                                                     width=180,
+                                                     corner_radius=0)
+            frame_operation.grid(row=0, column=2, sticky="nswe")
+
+            frame_result = customtkinter.CTkFrame(master=frame_entry,
+                                                  width=180,
+                                                  corner_radius=0)
+            frame_result.grid(row=0, column=3, sticky="nswe")
+
+            if entry[3] == "+" or entry[3] == "-" or entry[3] == "*":
+                matrix1 = []
+                matrix2 = []
+                result = []
+
+                for row in entry[0]:
+                    matrix1.append([customtkinter.CTkLabel(
+                        master=frame_matrix1, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(matrix1):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                for row in entry[1]:
+                    matrix2.append([customtkinter.CTkLabel(
+                        master=frame_matrix2, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(matrix2):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                for row in entry[2]:
+                    result.append([customtkinter.CTkLabel(
+                        master=frame_result, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(result):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                operation = customtkinter.CTkLabel(
+                    master=frame_operation, text=f"{entry[3]}", width=30)
+                operation.grid(row=1, column=1)
+
+            elif entry[3] == "determinant":
+                matrix1 = []
+
+                for row in entry[0]:
+                    matrix1.append([customtkinter.CTkLabel(
+                        master=frame_matrix1, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(matrix1):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                result = customtkinter.CTkLabel(
+                    master=frame_result, text=f"{entry[2]}", width=30)
+                result.grid(row=1, column=1)
+
+                operation = customtkinter.CTkLabel(
+                    master=frame_operation, text=f"{entry[3]}", width=30)
+                operation.grid(row=1, column=1)
+
+            elif entry[3] == '^':
+                matrix1 = []
+                result = []
+                for row in entry[0]:
+                    matrix1.append([customtkinter.CTkLabel(
+                        master=frame_matrix1, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(matrix1):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+                for row in entry[2]:
+                    result.append([customtkinter.CTkLabel(
+                        master=frame_result, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(result):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                power = customtkinter.CTkLabel(
+                    master=frame_matrix2, text=f"{entry[1]}", width=30)
+                power.grid(row=1, column=1)
+
+                operation = customtkinter.CTkLabel(
+                    master=frame_operation, text=f"{entry[3]}", width=30)
+                operation.grid(row=1, column=1)
+
+            elif entry[3] == '^-1':
+
+                matrix1 = []
+                result = []
+                for row in entry[0]:
+                    matrix1.append([customtkinter.CTkLabel(
+                        master=frame_matrix1, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(matrix1):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+                for row in entry[2]:
+                    result.append([customtkinter.CTkLabel(
+                        master=frame_result, text=f"{value}", width=30) for value in row])
+                    for row_index, row in enumerate(result):
+                        for column_index, value in enumerate(row):
+                            value.grid(row=row_index, column=column_index)
+
+                operation = customtkinter.CTkLabel(
+                    master=frame_operation, text=f"{entry[3]}", width=30)
+                operation.grid(row=1, column=1)
 
     def history_button_event(self):
         self.display_operation_history_window()
 
     def addition_button_event(self):
+        self.memory.add_result(self.get_data()[0], self.get_data()[
+                               1], add_matrices(self.get_data()[0], self.get_data()[1]), '+')
         self.display_result(add_matrices(
             self.get_data()[0], self.get_data()[1]))
 
     def subtraction_button_event(self):
+        self.memory.add_result(self.get_data()[0], self.get_data()[
+                               1], subtract_matrices(self.get_data()[0], self.get_data()[1]), '-')
         self.display_result(subtract_matrices(
             self.get_data()[0], self.get_data()[1]))
 
     def multiplication_button_event(self):
+        self.memory.add_result(self.get_data()[0], self.get_data()[
+                               1], multiply_matrices(self.get_data()[0], self.get_data()[1]), '*')
         self.display_result(multiply_matrices(
             self.get_data()[0], self.get_data()[1]))
 
     def power_button_event(self):
-
+        self.memory.add_result(self.get_data()[0], self.get_data()[
+                               2], raise_to_power(self.get_data()[0], self.get_data()[2]), '^')
         self.display_result(raise_to_power(
             self.get_data()[0], self.get_data()[2]))
 
     def inversion_button_event(self):
+        self.memory.add_result(
+            self.get_data()[0], [], invert_matrix(self.get_data()[0]), '^-1')
         self.display_result(invert_matrix(self.get_data()[0]))
 
     def determinant_button_event(self):
-        print(compute_determinant(self.get_data()[0]))
+        self.memory.add_result(self.get_data()[0], [], compute_determinant(
+            self.get_data()[0]), 'determinant')
         result = [[compute_determinant(self.get_data()[0])]]
-        print(result)
         self.display_result(result)
 
     def change_mode(self):
