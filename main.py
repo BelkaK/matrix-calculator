@@ -195,20 +195,29 @@ class App(customtkinter.CTk):
 
     def read_file_button_event(self):
         matrix = read_matrix_from_file(
-            self.path_entry.get(), self.char_entry.get)
+            self.path_entry.get(), self.char_entry.get())
+        print(matrix)
+
         for input in self.matrix1:
             for elem in input:
                 elem.grid_remove()
+
         self.matrix1 = []
-        for i in range(len(matrix)):
+        for _ in range(len(matrix)):
             self.matrix1.append([customtkinter.CTkEntry(
-                master=self.frame_entry_left, width=30, placeholder_text=matrix[i][j]) for j in range(len(matrix))])
+                master=self.frame_entry_left, width=30) for _ in range(len(matrix))])
         for row_index, row in enumerate(self.matrix1):
             for column_index, elem in enumerate(row):
                 elem.grid(row=row_index, column=column_index)
+        for row_index, row in enumerate(self.matrix1):
+            for column_index, elem in enumerate(row):
+                elem.insert(0, matrix[row_index][column_index])
 
     def dimention_button_event(self):
-        dimention = int(self.dimention_entry.get())
+        try:
+            dimention = int(self.dimention_entry.get())
+        except:
+            dimention = 1
         if dimention < 7:
 
             # clear the previous inputs
